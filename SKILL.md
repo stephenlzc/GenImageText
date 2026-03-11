@@ -191,10 +191,34 @@ Before rendering, ask user 5 questions to customize the output:
 
 Use `scripts/text_renderer.py` to add text to image.
 
+### Output File Organization
+
+All output files should be organized in the `outputs/` directory with the following structure:
+
+```
+outputs/
+└── YYYYMMDD/              # Date-based subfolder (e.g., 20250312/)
+    ├── YYYYMMDD_poster_final.png
+    ├── YYYYMMDD_flowchart.png
+    └── YYYYMMDD_infographic.png
+```
+
+**Naming Convention:**
+- Folder: `outputs/YYYYMMDD/` (current date)
+- Files: `YYYYMMDD_<description>.png`
+- This makes it easy to manage and find files by date
+
 ### Example
 
 ```python
 from scripts.text_renderer import render_text_on_image
+from datetime import datetime
+import os
+
+# Generate date-based paths
+today = datetime.now().strftime("%Y%m%d")
+output_dir = f"outputs/{today}"
+os.makedirs(output_dir, exist_ok=True)
 
 user_choices = {
     "font_style": "modern",
@@ -205,7 +229,7 @@ user_choices = {
 
 output_path = render_text_on_image(
     image_path="generated_image.png",
-    output_path="final_image.png",
+    output_path=f"{output_dir}/{today}_poster_final.png",
     placements=placements,
     user_choices=user_choices
 )

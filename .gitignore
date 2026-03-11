@@ -23,6 +23,13 @@ build/
 *.jpeg
 !assets/font_preview.png
 
+# Outputs directory - keep directory but ignore image files
+!outputs/
+outputs/*.png
+outputs/*.jpg
+outputs/*.jpeg
+!outputs/.gitkeep
+
 # Node.js
 node_modules/
 npm-debug.log*

@@ -1,29 +1,12 @@
 # Perfect Text Overlay - パーフェクトテキストオーバーレイ
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm version](https://badge.fury.io/js/perfect-text-overlay.svg)](https://www.npmjs.com/package/perfect-text-overlay)
 
 > 画像生成とテキストレンダリングを分離することで、AI生成画像の文字化け問題を解決します。
 
 🌐 [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | **日本語** | [한국어](README.ko.md)
 
 ---
-
-## クイックスタート
-
-```bash
-# インストール
-npm install -g perfect-text-overlay
-
-# 環境チェック
-pto check
-
-# フォントダウンロード（オプション）
-pto download-fonts --all
-
-# 使用
-pto separate "タイトル'こんにちは世界'のポスターを作成"
-```
 
 ## 機能概要
 
@@ -34,70 +17,74 @@ AIが生成した画像には、特に中国語・日本語・韓国語（CJK）
 3. **分析** 画像から最適なテキスト配置領域を特定
 4. **レンダリング** 完璧なテキスト（プロフェッショナルなタイポグラフィ使用）
 
+---
+
 ## インストール
 
 ### 要件
-- Node.js 18+
 - Python 3.8+
 - Pythonパッケージ：`pip install Pillow numpy`
 
-### NPMインストール（推奨）
-```bash
-npm install -g perfect-text-overlay
-```
-
 ### Gitクローン
+
 ```bash
 git clone https://github.com/stephenlzc/perfect-text-overlay
 cd perfect-text-overlay
-npm install
 ```
 
-## CLI使用方法
+---
 
-```bash
-# プロンプトを分離
-pto separate -p "映画ポスター、タイトルは'インターステラー'"
+## 使用方法
 
-# 画像を分析
-pto analyze -i base.png -r '{"text_groups":[{"content":"こんにちは"}]}'
+### ステップ 1：プロンプトを分離
 
-# テキストをレンダリング
-pto render -i base.png -o final.png -p placements.json
+```python
+from scripts.prompt_separator import separate_prompt
 
-# 完全なワークフロー
-pto workflow -p "ポスター、タイトル'セール'" -i base.png -o final.png
-
-# フォントをダウンロード
-pto download-fonts --list
-pto download-fonts --all
+result = separate_prompt("映画ポスター、タイトルは'インターステラー'")
+# result['image_prompt']: テキストを含まない純粋な視覚的説明
+# result['text_requirements']: 構造化されたテキストデータ
 ```
 
-## Node.js API
+### ステップ 2：ベース画像を生成
 
-```javascript
-const { separatePrompt, analyzeImage, renderTextOnImage } = require('perfect-text-overlay');
+`image_prompt` を使用して、お好みのAI画像生成ツール（DALL-E、Midjourney、Stable Diffusion など）で画像を生成します
 
-async function createPoster() {
-  // 1. プロンプトを分離
-  const result = await separatePrompt('ポスター、タイトル"こんにちは"');
-  
-  // 2. 画像を分析（result.image_promptで画像生成後）
-  const analysis = await analyzeImage('base.png', result.text_requirements);
-  
-  // 3. テキストをレンダリング
-  await renderTextOnImage('base.png', 'final.png', 
-    analysis.placements, 
-    { font_style: 'modern', effects: ['shadow'] }
-  );
-}
+### ステップ 3：画像を分析
+
+```python
+from scripts.image_analyzer import analyze_image, get_text_placement_suggestions
+
+analysis = analyze_image("base_image.png", text_requirements)
+placements = get_text_placement_suggestions(analysis, text_requirements)
 ```
 
-## フォントスタイル
+### ステップ 4：テキストをレンダリング
 
-### 利用可能なフォント
+```python
+from scripts.text_renderer import render_text_on_image
 
-`pto download-fonts --list` を実行すると、詳細情報付きで利用可能なフォントが表示されます。
+output_path = render_text_on_image(
+    image_path="base_image.png",
+    output_path="final_image.png",
+    placements=placements,
+    user_choices={
+        "font_style": "modern",
+        "effects": ["shadow", "outline"]
+    }
+)
+```
+
+---
+
+## フォントの取り扱い
+
+フォントは以下の優先順位で読み込まれます：
+
+1. **ユーザー提供のフォントパス**：指定されている場合
+2. **Skill アセット**：`assets/fonts/` ディレクトリをチェック
+3. **システムフォント**：一般的なシステムフォントディレクトリを検索
+4. **フォールバック**：デフォルトのPILフォント
 
 ### 言語別フォント推奨
 
@@ -125,39 +112,29 @@ async function createPoster() {
 
 ### フォントのダウンロード
 
-```bash
-# すべての利用可能なフォントを表示
-pto download-fonts --list
+Google Fonts または Noto Fonts からフォントを手動でダウンロードし、`assets/fonts/` ディレクトリに配置できます：
 
-# すべてのフォントをダウンロード
-pto download-fonts --all
+- **Noto CJK フォント**：https://www.google.com/get/noto/
+- **Roboto**：https://fonts.google.com/specimen/Roboto
+- **Open Sans**：https://fonts.google.com/specimen/Open+Sans
 
-# 特定のフォントをダウンロード
-pto download-fonts Roboto-Bold.ttf
+すべてのフォントはSIL Open Font License または Apache License 2.0 の下で無料で商用利用可能です。
 
-# 複数のフォントをダウンロード
-pto download-fonts Roboto-Bold.ttf OpenSans-Bold.ttf
-```
+---
 
 ## プロジェクト構造
 
 ```
 perfect-text-overlay/
-├── bin/cli.js              # CLIエントリ
-├── lib/index.js            # Node.js API
 ├── scripts/                # Pythonスクリプト
 │   ├── prompt_separator.py
 │   ├── image_analyzer.py
 │   └── text_renderer.py
-├── assets/fonts/           # フォント（オンデマンドダウンロード）
-└── types/                  # TypeScript定義
+├── assets/fonts/           # フォントディレクトリ
+└── references/             # 参考資料
 ```
 
-## ドキュメント
-
-- [API Reference](API.md) - 詳細APIドキュメント
-- [Contributing](CONTRIBUTING.md) - 貢献ガイド
-- [CHANGELOG](CHANGELOG.md) - バージョン履歴
+---
 
 ## ライセンス
 

@@ -1,7 +1,6 @@
 # Perfect Text Overlay
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm version](https://badge.fury.io/js/perfect-text-overlay.svg)](https://www.npmjs.com/package/perfect-text-overlay)
 
 > Fix imperfect AI-generated text in images by separating image generation and text overlay.
 
@@ -13,112 +12,79 @@
 
 AI-generated images often contain garbled or imperfect text, especially for Chinese, Japanese, Korean (CJK) and other non-Latin scripts. This tool solves this problem by separating image generation and text rendering into two distinct steps:
 
-1. **Generate a clean base image** without text
-2. **Analyze optimal text placement zones**
-3. **Render text** with professional typography and effects
-
----
-
-## For AI Agents (Natural Language Installation)
-
-Copy and paste this prompt to your LLM agent (Claude Code, Kimi Code, Cursor, etc.):
-
-```
-Install the perfect-text-overlay skill to my workspace. 
-Clone from: https://github.com/stephenlzc/perfect-text-overlay
-Set up all dependencies and verify the installation by running a test with Chinese text extraction.
-```
-
----
-
-## Quick Start
-
-```bash
-# Install
-npm install -g perfect-text-overlay
-
-# Check environment
-pto check
-
-# Download fonts (optional)
-pto download-fonts --all
-
-# Use it
-pto separate "Generate a poster with 'Summer Sale' title"
-```
+1. **Separate** prompt → image-only prompt + text requirements
+2. **Generate** clean base image (using your AI tool)
+3. **Analyze** image for optimal text placement zones
+4. **Render** perfect text with professional typography
 
 ---
 
 ## Installation
 
 ### Requirements
-- Node.js 18+
 - Python 3.8+
 - Python packages: `pip install Pillow numpy`
 
-### NPM
-```bash
-npm install -g perfect-text-overlay
-```
-
 ### Git Clone
+
 ```bash
 git clone https://github.com/stephenlzc/perfect-text-overlay
 cd perfect-text-overlay
-npm install
 ```
 
 ---
 
-## CLI Usage
+## Usage
 
-```bash
-# Separate prompt
-pto separate -p "Movie poster with 'Interstellar' title"
+### Step 1: Separate Prompt
 
-# Analyze image
-pto analyze -i base.png -r '{"text_groups":[{"content":"Hello"}]}'
+```python
+from scripts.prompt_separator import separate_prompt
 
-# Render text
-pto render -i base.png -o final.png -p placements.json
+result = separate_prompt("Movie poster with 'Interstellar' title")
+# result['image_prompt']: Clean visual description without text
+# result['text_requirements']: Structured text data
+```
 
-# Complete workflow
-pto workflow -p "Poster with 'Sale' title" -i base.png -o final.png
+### Step 2: Generate Base Image
 
-# Download fonts
-pto download-fonts --list
-pto download-fonts --all
+Use the `image_prompt` with your preferred AI image generator (DALL-E, Midjourney, Stable Diffusion, etc.)
+
+### Step 3: Analyze Image
+
+```python
+from scripts.image_analyzer import analyze_image, get_text_placement_suggestions
+
+analysis = analyze_image("base_image.png", text_requirements)
+placements = get_text_placement_suggestions(analysis, text_requirements)
+```
+
+### Step 4: Render Text
+
+```python
+from scripts.text_renderer import render_text_on_image
+
+output_path = render_text_on_image(
+    image_path="base_image.png",
+    output_path="final_image.png",
+    placements=placements,
+    user_choices={
+        "font_style": "modern",
+        "effects": ["shadow", "outline"]
+    }
+)
 ```
 
 ---
 
-## Node.js API
+## Font Handling
 
-```javascript
-const { separatePrompt, analyzeImage, renderTextOnImage } = require('perfect-text-overlay');
+Fonts are loaded with the following priority:
 
-async function createPoster() {
-  // 1. Separate
-  const result = await separatePrompt('Poster with "Hello" title');
-  
-  // 2. Analyze (after generating image with result.image_prompt)
-  const analysis = await analyzeImage('base.png', result.text_requirements);
-  
-  // 3. Render
-  await renderTextOnImage('base.png', 'final.png', 
-    analysis.placements, 
-    { font_style: 'modern', effects: ['shadow'] }
-  );
-}
-```
-
----
-
-## Font Styles
-
-### Available Fonts
-
-Run `pto download-fonts --list` to see all available fonts with detailed information.
+1. **User-provided font path**: If specified
+2. **Skill assets**: Check `assets/fonts/` directory
+3. **System fonts**: Search common system font directories
+4. **Fallback**: Default PIL font
 
 ### Font Recommendations by Language
 
@@ -146,19 +112,13 @@ Run `pto download-fonts --list` to see all available fonts with detailed informa
 
 ### Download Fonts
 
-```bash
-# List all available fonts with details
-pto download-fonts --list
+You can manually download fonts from Google Fonts or Noto Fonts and place them in `assets/fonts/`:
 
-# Download all fonts
-pto download-fonts --all
+- **Noto CJK Fonts**: https://www.google.com/get/noto/
+- **Roboto**: https://fonts.google.com/specimen/Roboto
+- **Open Sans**: https://fonts.google.com/specimen/Open+Sans
 
-# Download specific font
-pto download-fonts NotoSansCJKsc-Bold.otf
-
-# Download multiple fonts
-pto download-fonts NotoSansCJKsc-Bold.otf Roboto-Bold.ttf
-```
+All fonts are free for commercial use under SIL Open Font License or Apache License 2.0.
 
 ---
 
@@ -166,23 +126,13 @@ pto download-fonts NotoSansCJKsc-Bold.otf Roboto-Bold.ttf
 
 ```
 perfect-text-overlay/
-├── bin/cli.js              # CLI entry
-├── lib/index.js            # Node.js API
 ├── scripts/                # Python scripts
 │   ├── prompt_separator.py
 │   ├── image_analyzer.py
 │   └── text_renderer.py
-├── assets/fonts/           # Fonts (downloaded on demand)
-└── types/                  # TypeScript definitions
+├── assets/fonts/           # Fonts directory
+└── references/             # Reference materials
 ```
-
----
-
-## Documentation
-
-- [API Reference](API.md) - Detailed API documentation
-- [Contributing](CONTRIBUTING.md) - Contribution guidelines
-- [CHANGELOG](CHANGELOG.md) - Version history
 
 ---
 

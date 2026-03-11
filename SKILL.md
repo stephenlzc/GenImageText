@@ -37,6 +37,14 @@ Step 4: Text Overlay
         └─ Output: Final image with perfect text
 ```
 
+## Installation
+
+```bash
+git clone https://github.com/stephenlzc/perfect-text-overlay
+cd perfect-text-overlay
+pip install Pillow numpy
+```
+
 ## Step 1: Separate Prompt
 
 Use `scripts/prompt_separator.py` to extract text requirements.
@@ -252,21 +260,6 @@ The skill uses `scripts/text_renderer.py` with the following priority:
 3. **System fonts**: Search common system font directories
 4. **Fallback**: Default PIL font
 
-### Font Download (For NPM Package)
-
-When using the npm package, fonts are downloaded on-demand:
-
-```bash
-# List all available fonts
-pto download-fonts --list
-
-# Download all fonts
-pto download-fonts --all
-
-# Download specific font
-pto download-fonts NotoSansCJKsc-Bold.otf
-```
-
 ### Font Recommendations by Language
 
 #### 简体中文 (Simplified Chinese)
@@ -309,6 +302,14 @@ pto download-fonts NotoSansCJKsc-Bold.otf
 **Recommendation Mapping:**
 - Modern/Minimalist → `Roboto-Bold.ttf`
 - Traditional/Elegant → `OpenSans-Bold.ttf`
+
+### Download Fonts
+
+You can manually download fonts from Google Fonts or Noto Fonts and place them in `assets/fonts/`:
+
+- **Noto CJK Fonts**: https://www.google.com/get/noto/
+- **Roboto**: https://fonts.google.com/specimen/Roboto
+- **Open Sans**: https://fonts.google.com/specimen/Open+Sans
 
 ### Built-in Font Support
 

@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2025-03-11
+
+### Added
+- **NPM Package Support**: Package now available on npm registry
+- **CLI Tool (`pto`)**: Command-line interface for all operations
+- **On-demand Font Download**: Fonts downloaded via `pto download-fonts` instead of bundled
+- **Node.js API**: Full JavaScript/TypeScript API support
+- **GitHub Actions CI/CD**: Automated testing and publishing workflows
+- **TypeScript Definitions**: Complete type definitions in `types/`
+
+### Changed
+- **Package Size**: Reduced from ~76MB to 27.7KB (99.9% reduction)
+- **Font Distribution**: Fonts are no longer bundled, downloaded on-demand
+- **Installation**: Improved post-install checks and user feedback
+- **Documentation**: Updated all README files with npm installation instructions
+
+### Removed
+- Bundled font files from npm package (now downloaded on demand)
+- Example outputs and large asset files from package
+- Deprecated example files (moved to documentation)
+
+### Technical Improvements
+- Added `postinstall.js` for better setup experience
+- Added `download-fonts.js` for font management
+- Improved `.npmignore` to exclude unnecessary files
+- Added `files` field in `package.json` for precise package content control
+
+---
+
 ## [1.0.0] - 2025-03-11
 
 ### Added

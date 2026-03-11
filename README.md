@@ -9,6 +9,28 @@
 
 ---
 
+## Overview
+
+AI-generated images often contain garbled or imperfect text, especially for Chinese, Japanese, Korean (CJK) and other non-Latin scripts. This tool solves this problem by separating image generation and text rendering into two distinct steps:
+
+1. **Generate a clean base image** without text
+2. **Analyze optimal text placement zones**
+3. **Render text** with professional typography and effects
+
+---
+
+## For AI Agents (Natural Language Installation)
+
+Copy and paste this prompt to your LLM agent (Claude Code, Kimi Code, Cursor, etc.):
+
+```
+Install the perfect-text-overlay skill to my workspace. 
+Clone from: https://github.com/stephenlzc/perfect-text-overlay
+Set up all dependencies and verify the installation by running a test with Chinese text extraction.
+```
+
+---
+
 ## Quick Start
 
 ```bash
@@ -25,14 +47,7 @@ pto download-fonts --all
 pto separate "Generate a poster with 'Summer Sale' title"
 ```
 
-## What It Does
-
-AI-generated images often have garbled text, especially for Chinese/Japanese/Korean. This tool fixes that by:
-
-1. **Separate** prompt → image-only prompt + text requirements
-2. **Generate** clean base image (use your AI of choice)
-3. **Analyze** image for best text placement
-4. **Render** perfect text with professional typography
+---
 
 ## Installation
 
@@ -52,6 +67,8 @@ git clone https://github.com/stephenlzc/perfect-text-overlay
 cd perfect-text-overlay
 npm install
 ```
+
+---
 
 ## CLI Usage
 
@@ -73,6 +90,8 @@ pto download-fonts --list
 pto download-fonts --all
 ```
 
+---
+
 ## Node.js API
 
 ```javascript
@@ -93,6 +112,8 @@ async function createPoster() {
 }
 ```
 
+---
+
 ## Font Styles
 
 | Style | Language | Description |
@@ -106,6 +127,8 @@ async function createPoster() {
 | `cartoon` | Any | Fun, playful |
 
 Download fonts: `pto download-fonts --all`
+
+---
 
 ## Project Structure
 
@@ -121,11 +144,15 @@ perfect-text-overlay/
 └── types/                  # TypeScript definitions
 ```
 
+---
+
 ## Documentation
 
 - [API Reference](API.md) - Detailed API documentation
 - [Contributing](CONTRIBUTING.md) - Contribution guidelines
 - [CHANGELOG](CHANGELOG.md) - Version history
+
+---
 
 ## License
 

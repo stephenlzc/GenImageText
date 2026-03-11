@@ -69,7 +69,7 @@ Step 5: Text Overlay
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/stephenlzc/perfect-text-overlay
 cd perfect-text-overlay
 
 # Install dependencies

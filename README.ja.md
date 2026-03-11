@@ -69,7 +69,7 @@ AIが生成した画像には、特に中国語・日本語・韓国語（CJK）
 
 ```bash
 # リポジトリをクローン
-git clone <リポジトリURL>
+git clone https://github.com/stephenlzc/perfect-text-overlay
 cd perfect-text-overlay
 
 # 依存関係をインストール

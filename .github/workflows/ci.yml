@@ -36,11 +36,11 @@ jobs:
 
       - name: Verify environment
         run: |
-          echo "Node version: $(node --version)"
-          echo "npm version: $(npm --version)"
-          echo "Python version: $(python --version)"
-          echo "Package version: $(node -p "require('./package.json').version")"
-          ls -la test/fixtures/
+          node --version
+          npm --version
+          python --version
+          node -e "console.log('Package version:', require('./package.json').version)"
+          ls -la test/fixtures/ || echo "No fixtures directory"
 
       - name: Install Node.js dependencies
         run: npm ci

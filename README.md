@@ -4,7 +4,7 @@
 
 > Fix imperfect AI-generated text in images by separating image generation and text overlay.
 
-![GenImageText Hero](assets/hero.png)
+![GenImageText Hero](https://raw.githubusercontent.com/stephenlzc/GenImageText/main/assets/hero.png)
 
 🌐 **English** | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 

@@ -95,17 +95,49 @@ async function createPoster() {
 
 ## フォントスタイル
 
-| スタイル | 言語 | 説明 |
-|----------|------|------|
-| `modern` | 中国語 | モダン・シンプル |
-| `traditional` | 中国語 | 伝統的な宋体 |
-| `traditional_tw` | 中国語（台湾）| 繁体字中国語 |
-| `korean` | 韓国語 | 韓国語最適化 |
-| `english` | 英語/ラテン | Robotoフォント |
-| `calligraphy` | 任意 | アート・書道 |
-| `cartoon` | 任意 | キュート・カートゥーン |
+### 利用可能なフォント
 
-フォントダウンロード：`pto download-fonts --all`
+`pto download-fonts --list` を実行すると、詳細情報付きで利用可能なフォントが表示されます。
+
+### 言語別フォント推奨
+
+#### 簡体字中国語
+| フォントファイル | フォント名 | スタイル | 用途 |
+|-----------------|-----------|---------|------|
+| `NotoSansCJKsc-Bold.otf` | 源ノ角ゴシック Bold | モダン | ポスター、テックスタイル、ビジネス |
+| `NotoSerifCJKsc-Bold.otf` | 源ノ明朝 Bold | 伝統 | 文化テーマ、書籍表紙、正式文書 |
+
+#### 繁体字中国語
+| フォントファイル | フォント名 | スタイル | 用途 |
+|-----------------|-----------|---------|------|
+| `NotoSansCJKtc-Bold.otf` | 源ノ角ゴシック TC Bold | モダン | 台湾/香港、ビジネス文書 |
+
+#### 韓国語
+| フォントファイル | フォント名 | スタイル | 用途 |
+|-----------------|-----------|---------|------|
+| `NotoSansCJKkr-Bold.otf` | 本ゴシック Bold | モダン | 韓国語ポスター、モダンデザイン |
+
+#### 英語/ラテン
+| フォントファイル | フォント名 | スタイル | 用途 |
+|-----------------|-----------|---------|------|
+| `Roboto-Bold.ttf` | Roboto Bold | モダン | テックポスター、クリーンなデザイン |
+| `OpenSans-Bold.ttf` | Open Sans Bold | ヒューマニスト | Webコンテンツ、多目的使用 |
+
+### フォントのダウンロード
+
+```bash
+# すべての利用可能なフォントを表示
+pto download-fonts --list
+
+# すべてのフォントをダウンロード
+pto download-fonts --all
+
+# 特定のフォントをダウンロード
+pto download-fonts Roboto-Bold.ttf
+
+# 複数のフォントをダウンロード
+pto download-fonts Roboto-Bold.ttf OpenSans-Bold.ttf
+```
 
 ## プロジェクト構造
 

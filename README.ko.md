@@ -95,17 +95,49 @@ async function createPoster() {
 
 ## 폰트 스타일
 
-| 스타일 | 언어 | 설명 |
-|--------|------|------|
-| `modern` | 중국어 | 모던·심플 |
-| `traditional` | 중국어 | 전통 송체 |
-| `traditional_tw` | 중국어(대만) | 번체자 |
-| `korean` | 한국어 | 한국어 최적화 |
-| `english` | 영어/라틴 | Roboto 폰트 |
-| `calligraphy` | 모든 언어 | 아트·서예 |
-| `cartoon` | 모든 언어 | 귀여운 카툰 |
+### 사용 가능한 폰트
 
-폰트 다운로드: `pto download-fonts --all`
+`pto download-fonts --list`를 실행하면 자세한 정보와 함께 사용 가능한 폰트가 표시됩니다.
+
+### 언어별 폰트 추천
+
+#### 중국어 간체
+| 폰트 파일 | 폰트 이름 | 스타일 | 용도 |
+|---------|---------|--------|------|
+| `NotoSansCJKsc-Bold.otf` | 소원흑체 Bold | 모던 | 포스터, 테크 스타일, 비즈니스 |
+| `NotoSerifCJKsc-Bold.otf` | 소원명조 Bold | 전통 | 문화 테마, 책 표지, 공식 문서 |
+
+#### 중국어 번체
+| 폰트 파일 | 폰트 이름 | 스타일 | 용도 |
+|---------|---------|--------|------|
+| `NotoSansCJKtc-Bold.otf` | 소원흑체 TC Bold | 모던 | 대만/홍콩, 비즈니스 문서 |
+
+#### 한국어
+| 폰트 파일 | 폰트 이름 | 스타일 | 용도 |
+|---------|---------|--------|------|
+| `NotoSansCJKkr-Bold.otf` | 본고딕 Bold | 모던 | 한국어 포스터, 모던 디자인 |
+
+#### 영어/라틴
+| 폰트 파일 | 폰트 이름 | 스타일 | 용도 |
+|---------|---------|--------|------|
+| `Roboto-Bold.ttf` | Roboto Bold | 모던 | 테크 포스터, 깔끔한 디자인 |
+| `OpenSans-Bold.ttf` | Open Sans Bold | 휴머니스트 | 웹 콘텐츠, 다목적 사용 |
+
+### 폰트 다운로드
+
+```bash
+# 사용 가능한 모든 폰트 표시
+pto download-fonts --list
+
+# 모든 폰트 다운로드
+pto download-fonts --all
+
+# 특정 폰트 다운로드
+pto download-fonts NotoSansCJKkr-Bold.otf
+
+# 여러 폰트 다운로드
+pto download-fonts NotoSansCJKkr-Bold.otf Roboto-Bold.ttf
+```
 
 ## 프로젝트 구조
 

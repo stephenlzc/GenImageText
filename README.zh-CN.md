@@ -95,17 +95,49 @@ async function createPoster() {
 
 ## 字体风格
 
-| 风格 | 语言 | 描述 |
-|------|------|------|
-| `modern` | 中文 | 现代简约 |
-| `traditional` | 中文 | 传统宋体 |
-| `traditional_tw` | 中文（台湾）| 繁体中文 |
-| `korean` | 韩文 | 韩文优化 |
-| `english` | 英文/拉丁 | Roboto 字体 |
-| `calligraphy` | 任意 | 艺术书法 |
-| `cartoon` | 任意 | 可爱卡通 |
+### 可用字体列表
 
-下载字体：`pto download-fonts --all`
+运行 `pto download-fonts --list` 查看所有可用字体及详细信息。
+
+### 按语言推荐字体
+
+#### 简体中文
+| 字体文件 | 字体名称 | 风格 | 适用场景 |
+|---------|---------|------|---------|
+| `NotoSansCJKsc-Bold.otf` | 思源黑体 Bold | 现代 | 海报标题、科技风格、商务场景 |
+| `NotoSerifCJKsc-Bold.otf` | 思源宋体 Bold | 传统 | 文化主题、书籍封面、正式文档 |
+
+#### 繁體中文
+| 字体文件 | 字体名称 | 风格 | 适用场景 |
+|---------|---------|------|---------|
+| `NotoSansCJKtc-Bold.otf` | 思源黑體 Bold | 现代 | 台灣/香港地區、商務文件 |
+
+#### 韩文
+| 字体文件 | 字体名称 | 风格 | 适用场景 |
+|---------|---------|------|---------|
+| `NotoSansCJKkr-Bold.otf` | 본고딕 Bold | 现代 | 한국어 포스터、현대적 디자인 |
+
+#### 英文/拉丁
+| 字体文件 | 字体名称 | 风格 | 适用场景 |
+|---------|---------|------|---------|
+| `Roboto-Bold.ttf` | Roboto Bold | 现代 | 科技海报、简洁设计 |
+| `OpenSans-Bold.ttf` | Open Sans Bold | 人文 | 网页内容、通用场景 |
+
+### 下载字体
+
+```bash
+# 列出所有可用字体及详细信息
+pto download-fonts --list
+
+# 下载所有字体
+pto download-fonts --all
+
+# 下载特定字体
+pto download-fonts NotoSansCJKsc-Bold.otf
+
+# 下载多个字体
+pto download-fonts NotoSansCJKsc-Bold.otf Roboto-Bold.ttf
+```
 
 ## 项目结构
 

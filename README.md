@@ -116,17 +116,49 @@ async function createPoster() {
 
 ## Font Styles
 
-| Style | Language | Description |
-|-------|----------|-------------|
-| `modern` | Chinese | Clean, professional |
-| `traditional` | Chinese | Serif, elegant |
-| `traditional_tw` | Chinese (TW) | Traditional Chinese |
-| `korean` | Korean | Korean optimized |
-| `english` | English/Latin | Roboto font |
-| `calligraphy` | Any | Artistic style |
-| `cartoon` | Any | Fun, playful |
+### Available Fonts
 
-Download fonts: `pto download-fonts --all`
+Run `pto download-fonts --list` to see all available fonts with detailed information.
+
+### Font Recommendations by Language
+
+#### 简体中文 (Simplified Chinese)
+| Font File | Font Name | Style | Best For |
+|-----------|-----------|-------|----------|
+| `NotoSansCJKsc-Bold.otf` | 思源黑体 Bold | Modern | Posters, tech style, business |
+| `NotoSerifCJKsc-Bold.otf` | 思源宋体 Bold | Traditional | Cultural themes, formal documents |
+
+#### 繁體中文 (Traditional Chinese)
+| Font File | Font Name | Style | Best For |
+|-----------|-----------|-------|----------|
+| `NotoSansCJKtc-Bold.otf` | 思源黑體 Bold | Modern | Taiwan/Hong Kong, business docs |
+
+#### 한국어 (Korean)
+| Font File | Font Name | Style | Best For |
+|-----------|-----------|-------|----------|
+| `NotoSansCJKkr-Bold.otf` | 본고딕 Bold | Modern | Korean posters, modern design |
+
+#### English / Latin
+| Font File | Font Name | Style | Best For |
+|-----------|-----------|-------|----------|
+| `Roboto-Bold.ttf` | Roboto Bold | Modern | Tech posters, clean designs |
+| `OpenSans-Bold.ttf` | Open Sans Bold | Humanist | Web content, versatile use |
+
+### Download Fonts
+
+```bash
+# List all available fonts with details
+pto download-fonts --list
+
+# Download all fonts
+pto download-fonts --all
+
+# Download specific font
+pto download-fonts NotoSansCJKsc-Bold.otf
+
+# Download multiple fonts
+pto download-fonts NotoSansCJKsc-Bold.otf Roboto-Bold.ttf
+```
 
 ---
 

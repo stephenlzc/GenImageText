@@ -11,31 +11,55 @@ const https = require('https');
 
 const FONTS_DIR = path.join(__dirname, '..', 'assets', 'fonts');
 
-// Font definitions with download URLs
+// Font definitions with detailed descriptions
 const FONTS = {
   'NotoSansCJKsc-Bold.otf': {
     url: 'https://github.com/notofonts/noto-cjk/raw/main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Bold.otf',
-    description: 'Noto Sans CJK SC Bold - Simplified Chinese'
+    name: '思源黑体 Bold (Source Han Sans)',
+    language: '简体中文 (Simplified Chinese)',
+    style: '现代 / Modern',
+    useCase: '海报标题、科技风格、商务场景',
+    description: 'Clean, professional sans-serif font for Simplified Chinese'
   },
   'NotoSerifCJKsc-Bold.otf': {
     url: 'https://github.com/notofonts/noto-cjk/raw/main/Serif/OTF/SimplifiedChinese/NotoSerifCJKsc-Bold.otf',
-    description: 'Noto Serif CJK SC Bold - Traditional style'
+    name: '思源宋体 Bold (Source Han Serif)',
+    language: '简体中文 (Simplified Chinese)',
+    style: '传统 / Traditional',
+    useCase: '文化主题、书籍封面、正式文档',
+    description: 'Elegant serif font for traditional Chinese style'
   },
   'NotoSansCJKtc-Bold.otf': {
     url: 'https://github.com/notofonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Bold.otf',
-    description: 'Noto Sans CJK TC Bold - Traditional Chinese'
+    name: '思源黑體 Bold (Source Han Sans TC)',
+    language: '繁體中文 (Traditional Chinese)',
+    style: '现代 / Modern',
+    useCase: '台灣/香港地區、繁體海報、商務文件',
+    description: 'Modern sans-serif font for Traditional Chinese (Taiwan/Hong Kong)'
   },
   'NotoSansCJKkr-Bold.otf': {
     url: 'https://github.com/notofonts/noto-cjk/raw/main/Sans/OTF/Korean/NotoSansCJKkr-Bold.otf',
-    description: 'Noto Sans CJK KR Bold - Korean'
+    name: '본고딕 Bold (Noto Sans CJK KR)',
+    language: '한국어 (Korean)',
+    style: '现代 / Modern',
+    useCase: '한국어 포스터、비즈니스 문서、현대적인 디자인',
+    description: 'Modern Korean font optimized for Hangul script'
   },
   'Roboto-Bold.ttf': {
     url: 'https://github.com/googlefonts/roboto/raw/main/src/hinted/Roboto-Bold.ttf',
-    description: 'Roboto Bold - English/Latin'
+    name: 'Roboto Bold',
+    language: 'English / Latin',
+    style: '现代 / Modern',
+    useCase: 'English titles, tech posters, clean designs',
+    description: 'Google\'s signature font, perfect for modern English text'
   },
   'OpenSans-Bold.ttf': {
     url: 'https://github.com/googlefonts/opensans/raw/main/fonts/ttf/OpenSans-Bold.ttf',
-    description: 'Open Sans Bold - English/Latin'
+    name: 'Open Sans Bold',
+    language: 'English / Latin',
+    style: '人文 / Humanist',
+    useCase: 'Web content, UI design, versatile usage',
+    description: 'Humanist sans-serif with excellent readability'
   }
 };
 
@@ -126,13 +150,50 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   
   if (args.includes('--list')) {
-    console.log('Available fonts:\n');
-    for (const [name, info] of Object.entries(FONTS)) {
-      const exists = fs.existsSync(path.join(FONTS_DIR, name)) ? '✓' : ' ';
-      console.log(`  [${exists}] ${name}`);
-      console.log(`      ${info.description}`);
-      console.log('');
+    console.log('┌─────────────────────────────────────────────────────────────────────────────┐');
+    console.log('│                        Available Fonts 可用字体列表                          │');
+    console.log('└─────────────────────────────────────────────────────────────────────────────┘\n');
+    
+    // Group fonts by language
+    const groups = {
+      '简体中文 (Simplified Chinese)': [],
+      '繁體中文 (Traditional Chinese)': [],
+      '한국어 (Korean)': [],
+      'English / Latin': []
+    };
+    
+    for (const [fileName, info] of Object.entries(FONTS)) {
+      if (groups[info.language]) {
+        groups[info.language].push({ fileName, ...info });
+      }
     }
+    
+    for (const [lang, fonts] of Object.entries(groups)) {
+      if (fonts.length === 0) continue;
+      
+      console.log(`\n📁 ${lang}`);
+      console.log('─'.repeat(70));
+      
+      for (const font of fonts) {
+        const exists = fs.existsSync(path.join(FONTS_DIR, font.fileName));
+        const status = exists ? '✅ Installed' : '⬜ Not installed';
+        
+        console.log(`\n  ${status}  ${font.fileName}`);
+        console.log(`      Name:     ${font.name}`);
+        console.log(`      Style:    ${font.style}`);
+        console.log(`      Use for:  ${font.useCase}`);
+        console.log(`      Install:  pto download-fonts ${font.fileName}`);
+      }
+    }
+    
+    console.log('\n\n┌─────────────────────────────────────────────────────────────────────────────┐');
+    console.log('│                              Quick Commands                                 │');
+    console.log('├─────────────────────────────────────────────────────────────────────────────┤');
+    console.log('│  pto download-fonts --all       Download all fonts                          │');
+    console.log('│  pto download-fonts --list      Show this list                              │');
+    console.log('│  pto download-fonts <name>      Download specific font                      │');
+    console.log('└─────────────────────────────────────────────────────────────────────────────┘\n');
+    
     process.exit(0);
   }
   

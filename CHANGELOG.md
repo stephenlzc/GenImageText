@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0](https://github.com/stephenlzc/perfect-text-overlay/compare/v1.0.1...v1.1.0) (2026-03-11)
+
+
+### Features
+
+* Add detailed font descriptions and update all READMEs ([272be0a](https://github.com/stephenlzc/perfect-text-overlay/commit/272be0aba60b322517ef99360026ffaebc74da9f))
+
 ## [1.0.2] - 2025-03-11
 
 ### Added

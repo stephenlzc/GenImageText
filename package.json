@@ -1,6 +1,6 @@
 {
   "name": "perfect-text-overlay",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Fix imperfect AI-generated text in images by separating image generation and text overlay",
   "main": "lib/index.js",
   "types": "types/index.d.ts",

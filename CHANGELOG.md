@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.2] - 2025-03-11
+
+### Added
+- **Detailed Font Documentation**: Added comprehensive font descriptions and recommendations
+  - Font names in native languages (中文, 繁體中文, 한국어, English)
+  - Font style categorization (Modern, Traditional, Humanist)
+  - Recommended use cases for each font
+  - Font download commands with specific file names
+- **Language-Specific Font Selection**: Updated SKILL.md with automatic font recommendations based on user's language
+  - 简体中文: 思源黑体 (modern) / 思源宋体 (traditional)
+  - 繁體中文: 思源黑體 (modern)
+  - 한국어: 본고딕 (modern)
+  - English: Roboto (modern) / Open Sans (humanist)
+
+### Improved
+- **Enhanced `pto download-fonts --list`**: Better formatting with language grouping and installation status
+- **Updated READMEs**: All 5 language versions (EN, ZH-CN, ZH-TW, JA, KO) now include detailed font tables
+- **SKILL.md**: Added automatic language detection logic for font selection
+
+---
+
 ## [1.0.1] - 2025-03-11
 
 ### Added

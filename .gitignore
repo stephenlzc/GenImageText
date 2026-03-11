@@ -22,6 +22,7 @@ build/
 *.jpg
 *.jpeg
 !assets/font_preview.png
+!assets/hero.png
 
 # Outputs directory - keep directory but ignore image files
 !outputs/

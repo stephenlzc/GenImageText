@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> ⚠️ **IMPORTANT**: This is NOT an image generator. It adds perfect text to images created by your AI tools.
+
 > Fix imperfect AI-generated text in images by separating image generation and text overlay.
 
 ![GenImageText Hero](https://raw.githubusercontent.com/stephenlzc/GenImageText/main/assets/hero.png)
@@ -10,14 +12,35 @@
 
 ---
 
-## Overview
+## What This Tool Does
 
-AI-generated images often contain garbled or imperfect text, especially for Chinese, Japanese, Korean (CJK) and other non-Latin scripts. This tool solves this problem by separating image generation and text rendering into two distinct steps:
+AI-generated images often contain garbled or imperfect text, especially for Chinese, Japanese, Korean (CJK) and other non-Latin scripts. **This tool solves this problem** by separating the workflow:
 
-1. **Separate** prompt → image-only prompt + text requirements
-2. **Generate** clean base image (using your AI tool)
-3. **Analyze** image for optimal text placement zones
-4. **Render** perfect text with professional typography
+1. **This Skill** separates your prompt → image-only prompt + text requirements
+2. **Your AI Tool** generates the clean base image (Midjourney, DALL-E, Stable Diffusion, etc.)
+3. **This Skill** analyzes the image for optimal text placement
+4. **This Skill** renders perfect text with professional typography
+
+---
+
+## Supported AI Image Generators
+
+Use **any** of these tools for Step 2 (image generation):
+
+| Tool | Platform | Best For |
+|------|----------|----------|
+| **Midjourney** | Discord | High-quality artistic images |
+| **DALL-E 3** | ChatGPT, OpenAI API | Easy to use, great prompt understanding |
+| **Stable Diffusion** | Local, Hugging Face, Replicate | Open-source, customizable |
+| **Google Gemini/Imagen** | Google AI Studio, Gemini Pro | Integrated with Google's ecosystem |
+| **Adobe Firefly** | Adobe Creative Suite | Commercial use, safe for business |
+| **Microsoft Bing Image Creator** | Bing, Microsoft Designer | Free, powered by DALL-E 3 |
+| **Flux.1** | API, Local | High-quality open-source model |
+| **Leonardo.ai** | Web, App | Game assets, concept art |
+| **Ideogram** | Web | Text rendering in images |
+| **Playground AI** | Web | Free tier available |
+
+**Key Point**: This skill does NOT generate images. It only adds text to images created by the tools above.
 
 ---
 
@@ -50,7 +73,7 @@ cd GenImageText
 
 ## Usage
 
-### Step 1: Separate Prompt
+### Step 1: Separate Prompt (This Skill)
 
 ```python
 from scripts.prompt_separator import separate_prompt
@@ -60,11 +83,20 @@ result = separate_prompt("Movie poster with 'Interstellar' title")
 # result['text_requirements']: Structured text data
 ```
 
-### Step 2: Generate Base Image
+### Step 2: Generate Base Image (Your AI Tool)
 
-Use the `image_prompt` with your preferred AI image generator (DALL-E, Midjourney, Stable Diffusion, etc.)
+> ⚠️ **This step uses YOUR AI image generator, NOT this skill.**
 
-### Step 3: Analyze Image
+Use the `image_prompt` with your preferred AI image generator:
+- **Midjourney** - Discord-based generation
+- **DALL-E 3** (ChatGPT Plus, OpenAI API)
+- **Stable Diffusion** - Local or cloud-based
+- **Google Gemini/Imagen**
+- **Adobe Firefly**
+- **Microsoft Bing Image Creator** (Free)
+- **Any other AI image tool you prefer**
+
+### Step 3: Analyze Image (This Skill)
 
 ```python
 from scripts.image_analyzer import analyze_image, get_text_placement_suggestions
@@ -73,7 +105,7 @@ analysis = analyze_image("base_image.png", text_requirements)
 placements = get_text_placement_suggestions(analysis, text_requirements)
 ```
 
-### Step 4: Render Text
+### Step 4: Render Text (This Skill)
 
 ```python
 from scripts.text_renderer import render_text_on_image

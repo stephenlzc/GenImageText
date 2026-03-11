@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> ⚠️ **중요**: 이것은 이미지 생성 도구가 아닙니다. 사용자의 AI 도구가 생성한 이미지에 완벽한 텍스트를 추가합니다.
+
 > 이미지 생성과 텍스트 렌더링을 분리하여 AI 생성 이미지의 텍스트 깨짐 문제를 해결합니다.
 
 ![GenImageText Hero](https://raw.githubusercontent.com/stephenlzc/GenImageText/main/assets/hero.png)
@@ -10,14 +12,35 @@
 
 ---
 
-## 기능 개요
+## 이 도구의 기능
 
-AI가 생성한 이미지에는 특히 중국어, 일본어, 한국어(CJK) 등의 비라틴 문자에서 텍스트가 깨지거나 불완전한 문제가 자주 발생합니다. 본 도구는 다음 단계로 이 문제를 해결합니다:
+AI가 생성한 이미지에는 특히 중국어, 일본어, 한국어(CJK) 등의 비라틴 문자에서 텍스트가 깨지거나 불완전한 문제가 자주 발생합니다.**본 도구는 다음 방법으로 이 문제를 해결합니다**：
 
-1. **분리** 프롬프트 → 이미지 전용 프롬프트 + 텍스트 요구사항
-2. **생성** 깨끗한 기본 이미지 (사용자의 AI 도구 사용)
-3. **분석** 이미지에서 최적의 텍스트 배치 영역 찾기
-4. **렌더링** 완벽한 텍스트 (전문 타이포그래피 사용)
+1. **본 스킬** 프롬프트 분리 → 이미지 전용 프롬프트 + 텍스트 요구사항
+2. **사용자의 AI 도구** 깨끗한 기본 이미지 생성（Midjourney、DALL-E、Stable Diffusion 등）
+3. **본 스킬** 이미지에서 최적의 텍스트 배치 영역 찾기
+4. **본 스킬** 완벽한 텍스트 렌더링（전문 타이포그래피 사용）
+
+---
+
+## 지원되는 AI 이미지 생성 도구
+
+2단계（이미지 생성）에 다음**어떤** 도구도 사용할 수 있습니다：
+
+| 도구 | 플랫폼 | 최적의 용도 |
+|------|--------|------------|
+| **Midjourney** | Discord | 고품질 아트 이미지 |
+| **DALL-E 3** | ChatGPT、OpenAI API | 사용하기 쉽고, 프롬프트 이해가 우수 |
+| **Stable Diffusion** | 로컬、Hugging Face、Replicate | 오픈소스、커스터마이징 가능 |
+| **Google Gemini/Imagen** | Google AI Studio、Gemini Pro | Google 에코시스템 통합 |
+| **Adobe Firefly** | Adobe Creative Suite | 상업적 사용에 안전 |
+| **Microsoft Bing Image Creator** | Bing、Microsoft Designer | 무료, DALL-E 3 탑재 |
+| **Flux.1** | API、로컬 | 고품질 오픈소스 모델 |
+| **Leonardo.ai** | 웹、앱 | 게임 에셋, 컨셉 아트 |
+| **Ideogram** | 웹 | 이미지 내 텍스트 렌더링 |
+| **Playground AI** | 웹 | 무료 플랜 있음 |
+
+**중요한 포인트**: 본 스킬은**이미지를 생성하지 않습니다**. 위 도구가 생성한 이미지에만 텍스트를 추가합니다.
 
 ---
 
@@ -50,7 +73,7 @@ cd GenImageText
 
 ## 사용 방법
 
-### 단계 1: 프롬프트 분리
+### 단계 1: 프롬프트 분리（본 스킬）
 
 ```python
 from scripts.prompt_separator import separate_prompt
@@ -60,11 +83,20 @@ result = separate_prompt("영화 포스터, 제목은'인터스텔라'")
 # result['text_requirements']: 구조화된 텍스트 데이터
 ```
 
-### 단계 2: 기본 이미지 생성
+### 단계 2: 기본 이미지 생성（사용자의 AI 도구）
 
-`image_prompt`를 사용하여 선호하는 AI 이미지 생성기(DALL-E, Midjourney, Stable Diffusion 등)로 이미지를 생성합니다
+> ⚠️ **이 단계에서는 본 스킬이 아닌 사용자의 AI 이미지 생성 도구를 사용합니다.**
 
-### 단계 3: 이미지 분석
+`image_prompt`를 사용하여 선호하는 AI 이미지 생성기로 이미지를 생성합니다：
+- **Midjourney** - Discord 기반 생성
+- **DALL-E 3**（ChatGPT Plus、OpenAI API）
+- **Stable Diffusion** - 로컬 또는 클라우드 기반
+- **Google Gemini/Imagen**
+- **Adobe Firefly**
+- **Microsoft Bing Image Creator**（무료）
+- **기타 선호하는 AI 이미지 도구**
+
+### 단계 3: 이미지 분석（본 스킬）
 
 ```python
 from scripts.image_analyzer import analyze_image, get_text_placement_suggestions
@@ -73,7 +105,7 @@ analysis = analyze_image("base_image.png", text_requirements)
 placements = get_text_placement_suggestions(analysis, text_requirements)
 ```
 
-### 단계 4: 텍스트 렌더링
+### 단계 4: 텍스트 렌더링（본 스킬）
 
 ```python
 from scripts.text_renderer import render_text_on_image

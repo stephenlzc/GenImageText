@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> ⚠️ **重要提示**：這不是圖像生成器。它為您的 AI 工具生成的圖像添加完美文字。
+
 > 透過分離圖像生成和文字渲染，解決 AI 生成圖像中文字錯亂的問題。
 
 ![GenImageText Hero](https://raw.githubusercontent.com/stephenlzc/GenImageText/main/assets/hero.png)
@@ -10,14 +12,35 @@
 
 ---
 
-## 功能特點
+## 本工具的功能
 
-AI 生成的圖像經常包含錯亂或不完美的文字，特別是對於中文、日文、韓文（CJK）等非拉丁文字。本工具透過以下步驟解決這個問題：
+AI 生成的圖像經常包含錯亂或不完美的文字，特別是對於中文、日文、韓文（CJK）等非拉丁文字。**本工具透過以下方式解決這個問題**：
 
-1. **分離** 提示詞 → 純圖像提示詞 + 文字需求
-2. **生成** 乾淨的基礎圖像（使用您的 AI 工具）
-3. **分析** 圖像找出最佳文字放置區域
-4. **渲染** 完美的文字（使用專業排版）
+1. **本技能** 分離您的提示詞 → 純圖像提示詞 + 文字需求
+2. **您的 AI 工具** 生成乾淨的基礎圖像（Midjourney、DALL-E、Stable Diffusion 等）
+3. **本技能** 分析圖像找出最佳文字放置區域
+4. **本技能** 渲染完美的文字（使用專業排版）
+
+---
+
+## 支援的 AI 圖像生成器
+
+第 2 步（圖像生成）可以使用以下**任意**工具：
+
+| 工具 | 平台 | 最佳用途 |
+|------|------|----------|
+| **Midjourney** | Discord | 高品質藝術圖片 |
+| **DALL-E 3** | ChatGPT、OpenAI API | 易用，prompt 理解好 |
+| **Stable Diffusion** | Local、Hugging Face、Replicate | 開源，可客製化 |
+| **Google Gemini/Imagen** | Google AI Studio、Gemini Pro | Google 生態整合 |
+| **Adobe Firefly** | Adobe Creative Suite | 商業使用安全 |
+| **Microsoft Bing Image Creator** | Bing、Microsoft Designer | 免費，DALL-E 3 驅動 |
+| **Flux.1** | API、Local | 高品質開源模型 |
+| **Leonardo.ai** | Web、App | 遊戲資源，概念藝術 |
+| **Ideogram** | Web | 圖片中文字渲染 |
+| **Playground AI** | Web | 免費層可用 |
+
+**關鍵點**：本技能**不生成圖像**。它只給上述工具生成的圖像添加文字。
 
 ---
 
@@ -50,7 +73,7 @@ cd GenImageText
 
 ## 使用方法
 
-### 步驟 1：分離提示詞
+### 步驟 1：分離提示詞（本技能）
 
 ```python
 from scripts.prompt_separator import separate_prompt
@@ -60,11 +83,20 @@ result = separate_prompt("電影海報，標題寫'星際效應'")
 # result['text_requirements']: 結構化文字資料
 ```
 
-### 步驟 2：生成基礎圖像
+### 步驟 2：生成基礎圖像（您的 AI 工具）
 
-使用 `image_prompt` 透過您喜歡的 AI 圖像生成器生成圖像（DALL-E、Midjourney、Stable Diffusion 等）
+> ⚠️ **此步驟使用您的 AI 圖像生成器，不是本技能。**
 
-### 步驟 3：分析圖像
+使用 `image_prompt` 透過您喜歡的 AI 圖像生成器生成圖像：
+- **Midjourney** - 基於 Discord 的生成
+- **DALL-E 3**（ChatGPT Plus、OpenAI API）
+- **Stable Diffusion** - 本地或雲端
+- **Google Gemini/Imagen**
+- **Adobe Firefly**
+- **Microsoft Bing Image Creator**（免費）
+- **任何您喜歡的其他 AI 圖像工具**
+
+### 步驟 3：分析圖像（本技能）
 
 ```python
 from scripts.image_analyzer import analyze_image, get_text_placement_suggestions
@@ -73,7 +105,7 @@ analysis = analyze_image("base_image.png", text_requirements)
 placements = get_text_placement_suggestions(analysis, text_requirements)
 ```
 
-### 步驟 4：渲染文字
+### 步驟 4：渲染文字（本技能）
 
 ```python
 from scripts.text_renderer import render_text_on_image

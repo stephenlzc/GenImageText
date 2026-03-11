@@ -1,15 +1,34 @@
 ---
 name: GenImageText
-description: Add perfect text to AI-generated images. NOT an image generator - this skill overlays text on images created by user's AI tools (Midjourney, DALL-E, Stable Diffusion, etc.). Solves garbled text in AI-generated images by separating image generation and text rendering. Triggers on keywords like "生成海报", "create poster", "流程图", "flowchart", "带文字的图片", "image with text".
+description: Add perfect text to AI-generated images. NOT an image generator - this skill overlays text on images created by user's AI tools (Midjourney, DALL-E, Stable Diffusion, Gemini, etc.). Solves garbled text in AI-generated images by separating image generation and text rendering. Triggers on keywords like "create poster", "flowchart", "image with text".
 ---
 
 # GenImageText
 
 > ⚠️ **IMPORTANT**: This skill is NOT an image generator. It adds text to images created by your AI image tools.
 
-This skill solves the common problem of AI-generated images having imperfect or garbled text (especially Chinese characters). It separates the workflow into two parts:
-1. **User generates image** using their preferred AI tool (Midjourney, DALL-E, Stable Diffusion, etc.)
+This skill solves the common problem of AI-generated images having imperfect or garbled text (especially CJK characters). It separates the workflow into two parts:
+1. **User generates image** using their preferred AI tool (Midjourney, DALL-E, Stable Diffusion, Gemini, etc.)
 2. **This skill adds text** to the generated image with perfect typography
+
+## Supported AI Image Generators
+
+This skill can work with ANY AI image generation tool, including:
+
+| Tool | Platform | Best For |
+|------|----------|----------|
+| **Midjourney** | Discord | High-quality artistic images |
+| **DALL-E 3** | ChatGPT, OpenAI API | Easy to use, great prompt understanding |
+| **Stable Diffusion** | Local, Hugging Face, Replicate | Open-source, customizable |
+| **Google Gemini/Imagen** | Google AI Studio, Gemini Pro | Integrated with Google's ecosystem |
+| **Adobe Firefly** | Adobe Creative Suite | Commercial use, safe for business |
+| **Microsoft Bing Image Creator** | Bing, Microsoft Designer | Free, powered by DALL-E 3 |
+| **Flux.1** | API, Local | High-quality open-source model |
+| **Leonardo.ai** | Web, App | Game assets, concept art |
+| **Ideogram** | Web | Text rendering in images |
+| **Playground AI** | Web | Free tier available |
+
+**Key Point**: Step 2 (Image Generation) uses YOUR AI tool. This skill handles Steps 1, 3, 4, 5.
 
 ## When to Use This Skill
 
@@ -17,34 +36,37 @@ Use this skill when:
 1. User wants to add text to an AI-generated image
 2. AI-generated image has garbled text that needs to be fixed
 3. Keywords match: poster with text, flowcharts, diagrams, social media graphics with captions
-4. User mentions text to be included: "写'xxx'", "标题是", "with 'xxx' text", "saying 'xxx'"
+4. User mentions text to be included: "write 'xxx'", "title is", "with 'xxx' text", "saying 'xxx'"
 
 ## Workflow Overview
 
 ```
-Step 1: Prompt Separation
+Step 1: Prompt Separation        ← This Skill
         ├─ Extract text requirements from user prompt
         ├─ Generate image-only prompt (no text descriptions)
         └─ Output: Image Prompt + Text Requirements
 
-Step 2: Image Generation ⭐ USER'S AI TOOL
+Step 2: Image Generation         ← USER'S AI TOOL ⭐
         ├─ User generates base image using their preferred AI
-        │  (Midjourney, DALL-E, Stable Diffusion, etc.)
+        │  (Midjourney, DALL-E, Stable Diffusion, Gemini, etc.)
         ├─ Use the "image-only prompt" from Step 1
         └─ Output: Clean image without text
 
-Step 3: Image Analysis
+Step 3: Image Analysis           ← This Skill
         ├─ Analyze the AI-generated image for safe text placement zones
         ├─ Detect layout structure (for flowcharts)
         └─ Output: Layout suggestions with coordinates
 
-Step 4: Text Overlay ⭐ THIS SKILL
+Step 4: Ask User Questions       ← This Skill
         ├─ Ask user 5 questions for customization
+        └─ Output: User preferences
+
+Step 5: Text Overlay             ← This Skill
         ├─ Render perfect text on the AI-generated image
-        └─ Output: Final image with perfect text overlay
+        └─ Output: Final image with perfect text
 ```
 
-**Key Point**: Steps 1, 3, 4 use this skill. Step 2 uses user's own AI image generator.
+**Key Point**: Steps 1, 3, 4, 5 use this skill. Step 2 uses user's own AI image generator.
 
 ## Installation
 
@@ -61,7 +83,7 @@ Use `scripts/prompt_separator.py` to extract text requirements.
 ### Example
 
 **User Input:**
-> "生成一张春节促销海报，标题写'新春大促，全场5折起'，要有红色的喜庆氛围"
+> "Create a Chinese New Year promotional poster with title 'Spring Festival Sale, Up to 50% Off', red festive atmosphere"
 
 **Execution:**
 ```python
@@ -69,7 +91,7 @@ from scripts.prompt_separator import separate_prompt
 
 result = separate_prompt(user_input)
 # result['image_prompt']: "A festive Chinese New Year promotional poster, vibrant red and gold color scheme, traditional lanterns and plum blossoms decoration, celebration atmosphere, high quality, professional, clean composition, suitable for text overlay"
-# result['text_requirements']: {"type": "single_or_few", "text_groups": [{"id": "text_1", "content": "新春大促，全场5折起", "semantic_position": "auto"}]}
+# result['text_requirements']: {"type": "single_or_few", "text_groups": [{"id": "text_1", "content": "Spring Festival Sale, Up to 50% Off", "semantic_position": "auto"}]}
 ```
 
 **Output:**
@@ -82,9 +104,12 @@ result = separate_prompt(user_input)
 
 Use the `image_prompt` from Step 1 to generate the base image using:
 - **Midjourney** - Discord-based AI image generation
-- **DALL-E 3** (ChatGPT Plus) - OpenAI's image generator
+- **DALL-E 3** (ChatGPT Plus, OpenAI API) - OpenAI's image generator
 - **Stable Diffusion** - Local or web-based generation
+- **Google Gemini/Imagen** - Google's AI image tool
 - **Adobe Firefly** - Adobe's AI image tool
+- **Microsoft Bing Image Creator** - Free, powered by DALL-E 3
+- **Flux.1** - Open-source high-quality model
 - **Other AI image generators** - Any tool the user prefers
 
 **Important:**
@@ -117,58 +142,56 @@ placements = get_text_placement_suggestions(analysis, text_requirements)
 Before rendering, ask user 5 questions to customize the output:
 
 ### Question 1: Scene Type
-> **"请选择您的图片类型："**
-> - [ ] 海报/封面（单组/少量文字，强调视觉）
-> - [ ] 流程图/步骤图（多组文字，强调逻辑顺序）
-> - [ ] 信息图/数据图（多组文字，强调信息呈现）
-> - [ ] 示意图/标注图（多组文字，强调说明）
-> - [ ] 其他：（请描述）
+> **"Please select your image type:"**
+> - [ ] Poster/Cover (single/few text, visual focus)
+> - [ ] Flowchart/Step diagram (multiple text, logic sequence)
+> - [ ] Infographic/Data chart (multiple text, information display)
+> - [ ] Diagram/Annotation (multiple text, explanation)
+> - [ ] Other: (please describe)
 
 ### Question 2: Text Content Confirmation
 
 **For single/few text:**
-> "请确认文字内容：'[自动提取的内容]'"
-> - [ ] 内容正确
-> - [ ] 需要修改：（请填写完整内容）
+> "Please confirm text content: '[auto-extracted content]'"
+> - [ ] Content correct
+> - [ ] Needs modification: (please fill in complete content)
 
 **For flowchart/multiple text:**
-> "检测到多组文字，请确认："
+> "Multiple text detected, please confirm:"
 > 
-> | 序号 | 文字内容 |
-> |-----|---------|
-> | 1 | [内容1] |
-> | 2 | [内容2] |
+> | No. | Text Content |
+> |-----|-------------|
+> | 1 | [Content 1] |
+> | 2 | [Content 2] |
 > 
-> - [ ] 全部正确
-> - [ ] 修改第___号：（新内容）
+> - [ ] All correct
+> - [ ] Modify No.__: (new content)
 
 ### Question 3: Font Style
 
-**根据用户语言自动推荐合适的字体：**
+#### For Simplified Chinese users:
+> **"Please select font style:"**
+> - [ ] **Modern/Minimalist** (Source Han Sans - for: posters, tech, business) ⭐Recommended
+> - [ ] **Traditional/Calligraphy** (Source Han Serif - for: cultural, formal documents)
+> - [ ] **Cute/Cartoon** (for: children, fun scenes)
+> - [ ] **Artistic/Handwritten** (for: personal, creative)
+> - [ ] **Other**: (custom font path)
 
-#### For 简体中文用户：
-> **"请选择字体风格："**
-> - [ ] **现代简约**（思源黑体 - 适合：海报标题、科技风格、商务场景）⭐推荐
-> - [ ] **传统书法**（思源宋体 - 适合：文化主题、书籍封面、正式文档）
-> - [ ] **可爱卡通**（适合：儿童、趣味、轻松场景）
-> - [ ] **艺术手写**（适合：个人、温馨、创意场景）
-> - [ ] **其他**：（自定义字体路径）
-
-#### For 繁體中文用户：
-> **"請選擇字體風格："**
-> - [ ] **現代簡約**（思源黑體繁體 - 適合：海報標題、商務文件）⭐推薦
-> - [ ] **傳統書法**（適合：文化主題、正式場合）
-> - [ ] **可愛卡通**（適合：兒童、趣味場景）
-> - [ ] **藝術手寫**（適合：個人、溫馨場景）
-> - [ ] **其他**：（自定義字體路徑）
+#### For Traditional Chinese users:
+> **"請選擇字體風格:"**
+> - [ ] **現代簡約** (Source Han Sans TC - for: Taiwan/Hong Kong, business) ⭐推薦
+> - [ ] **傳統書法** (for: cultural themes, formal occasions)
+> - [ ] **可愛卡通** (for: children, fun scenes)
+> - [ ] **藝術手寫** (for: personal, creative)
+> - [ ] **其他**: (custom font path)
 
 #### For Korean users:
 > **"폰트 스타일을 선택하세요:"**
-> - [ ] **모던/현대적** (본고딕 - 한국어 최적화, 비즈니스/현대 디자인) ⭐추천
-> - [ ] **전통적** (전통 주제, 공식 문서)
-> - [ ] **귀여운/카툰** (어린이, 재미있는 스타일)
-> - [ ] **아티스틱** (개인적, 창의적 작품)
-> - [ ] **기타**: (커스텀 폰트 경로)
+> - [ ] **모던/현대적** (Noto Sans CJK KR - Korean optimized, business) ⭐추천
+> - [ ] **전통적** (traditional themes, formal documents)
+> - [ ] **귀여운/카툰** (children, fun styles)
+> - [ ] **아티스틱** (personal, creative works)
+> - [ ] **기타**: (custom font path)
 
 #### For English users:
 > **"Please select font style:"**
@@ -179,29 +202,29 @@ Before rendering, ask user 5 questions to customize the output:
 > - [ ] **Other**: (custom font path)
 
 ### Question 4: Text Position
-> **"请选择文字位置："**
-> - [ ] 顶部居中（标题风格）
-> - [ ] 底部居中（电影海报风格）
-> - [ ] 中心位置（强调重点）
-> - [ ] 自动检测最佳位置
-> - [ ] 自定义：（如"右上角避开人脸"、"左侧竖排"）
+> **"Please select text position:"**
+> - [ ] Top center (title style)
+> - [ ] Bottom center (movie poster style)
+> - [ ] Center (emphasis)
+> - [ ] Auto-detect best position
+> - [ ] Custom: (e.g., "top-right avoiding face", "left vertical")
 
 **For flowcharts:**
-> - [ ] 水平流程（左→右）
-> - [ ] 垂直流程（上→下）
-> - [ ] 分支结构
-> - [ ] 精确控制：（描述连接关系）
+> - [ ] Horizontal flow (left→right)
+> - [ ] Vertical flow (top→bottom)
+> - [ ] Branch structure
+> - [ ] Precise control: (describe connection relationships)
 
 ### Question 5: Effects and Style
-> **"请选择文字效果（可多选）："**
-> - [ ] 添加阴影（增加立体感）
-> - [ ] 添加描边（增强可读性）
-> - [ ] 半透明背景框（确保清晰）
-> - [ ] 添加框线（流程图节点）
-> - [ ] 添加连接箭头（流程图）
-> - [ ] 不需要特效
+> **"Please select text effects (multiple choice):"**
+> - [ ] Add shadow (3D effect)
+> - [ ] Add outline (enhance readability)
+> - [ ] Semi-transparent background box (ensure clarity)
+> - [ ] Add border (flowchart nodes)
+> - [ ] Add connection arrows (flowchart)
+> - [ ] No effects
 >
-> **额外要求：**（如"金色渐变文字"、"品牌色#FF5733"）
+> **Additional requirements:** (e.g., "gold gradient text", "brand color #FF5733")
 
 ## Step 5: Render Text Overlay (This Skill)
 
@@ -263,13 +286,13 @@ output_path = render_text_on_image(
 
 ### Scenario 1: Poster with Title
 
-**User Request:** "生成一张电影海报，标题写'星际穿越'，科幻风格"
+**User Request:** "Create a movie poster with title 'Interstellar', sci-fi style"
 
 **Workflow:**
 ```
 Step 1 (This Skill): 
   ├─ Image prompt: "sci-fi movie poster, space theme..." (no text)
-  └─ Text: "星际穿越"
+  └─ Text: "Interstellar"
 
 Step 2 (User's AI Tool - Midjourney/DALL-E):
   └─ Generate base image using the prompt from Step 1
@@ -277,18 +300,18 @@ Step 2 (User's AI Tool - Midjourney/DALL-E):
 Step 3-5 (This Skill):
   ├─ Analyze the AI-generated image
   ├─ Detect best placement for title
-  └─ Render "星际穿越" with perfect typography
+  └─ Render "Interstellar" with perfect typography
 ```
 
 ### Scenario 2: Flowchart
 
-**User Request:** "创建一个用户注册流程图：1.填写信息 2.验证邮箱 3.完成"
+**User Request:** "Create a user registration flowchart: 1.Fill info 2.Verify email 3.Complete"
 
 **Workflow:**
 ```
 Step 1 (This Skill):
   ├─ Image prompt: "clean workflow diagram, professional blue..."
-  └─ Text: ["填写信息", "验证邮箱", "完成"]
+  └─ Text: ["Fill info", "Verify email", "Complete"]
 
 Step 2 (User's AI Tool):
   └─ Generate diagram image using the prompt
@@ -312,104 +335,46 @@ The skill uses `scripts/text_renderer.py` with the following priority:
 
 ### Font Recommendations by Language
 
-#### 简体中文 (Simplified Chinese)
+#### Simplified Chinese
 
-| 风格 | 字体文件 | 字体名称 | 适用场景 |
-|------|---------|---------|---------|
-| **现代** ⭐ | `NotoSansCJKsc-Bold.otf` | 思源黑体 Bold | 海报标题、科技风格、商务场景 |
-| **传统** | `NotoSerifCJKsc-Bold.otf` | 思源宋体 Bold | 文化主题、书籍封面、正式文档 |
+| Style | Font File | Font Name | Best For |
+|-------|-----------|-----------|----------|
+| **Modern** ⭐ | `NotoSansCJKsc-Bold.otf` | Source Han Sans Bold | Posters, tech, business |
+| **Traditional** | `NotoSerifCJKsc-Bold.otf` | Source Han Serif Bold | Cultural, books, formal |
 
-**推荐映射:**
-- 现代简约 → `NotoSansCJKsc-Bold.otf`
-- 传统书法 → `NotoSerifCJKsc-Bold.otf`
+**Mapping:**
+- Modern/Minimalist → `NotoSansCJKsc-Bold.otf`
+- Traditional/Calligraphy → `NotoSerifCJKsc-Bold.otf`
 
-#### 繁體中文 (Traditional Chinese)
+#### Traditional Chinese
 
-| 风格 | 字体文件 | 字体名称 | 适用场景 |
-|------|---------|---------|---------|
-| **现代** ⭐ | `NotoSansCJKtc-Bold.otf` | 思源黑體 Bold | 台灣/香港、商務文件、現代海報 |
+| Style | Font File | Font Name | Best For |
+|-------|-----------|-----------|----------|
+| **Modern** ⭐ | `NotoSansCJKtc-Bold.otf` | Source Han Sans TC Bold | Taiwan/Hong Kong, business |
 
-**推荐映射:**
-- 現代簡約 → `NotoSansCJKtc-Bold.otf`
-- 傳統書法 → `NotoSerifCJKsc-Bold.otf` (_fallback_)
+**Mapping:**
+- Modern/Minimalist → `NotoSansCJKtc-Bold.otf`
+- Traditional/Calligraphy → `NotoSerifCJKsc-Bold.otf` (fallback)
 
-#### 한국어 (Korean)
+#### Korean
 
-| 스타일 | 폰트 파일 | 폰트 이름 | 용도 |
-|--------|----------|----------|------|
-| **모던** ⭐ | `NotoSansCJKkr-Bold.otf` | 본고딕 Bold | 한국어 포스터、비즈니스、현대 디자인 |
+| Style | Font File | Font Name | Best For |
+|-------|-----------|-----------|----------|
+| **Modern** ⭐ | `NotoSansCJKkr-Bold.otf` | Noto Sans CJK KR Bold | Korean posters, modern design |
 
-**추천 매핑:**
-- 모던/현대적 → `NotoSansCJKkr-Bold.otf`
+**Mapping:**
+- Modern → `NotoSansCJKkr-Bold.otf`
 
 #### English / Latin
 
 | Style | Font File | Font Name | Best For |
 |-------|-----------|-----------|----------|
-| **Modern** ⭐ | `Roboto-Bold.ttf` | Roboto Bold | Tech posters, clean designs, business |
-| **Humanist** | `OpenSans-Bold.ttf` | Open Sans Bold | Web content, versatile, highly readable |
+| **Modern** ⭐ | `Roboto-Bold.ttf` | Roboto Bold | Tech, clean designs |
+| **Humanist** | `OpenSans-Bold.ttf` | Open Sans Bold | Web, versatile |
 
-**Recommendation Mapping:**
+**Mapping:**
 - Modern/Minimalist → `Roboto-Bold.ttf`
 - Traditional/Elegant → `OpenSans-Bold.ttf`
-
-### Download Fonts
-
-You can manually download fonts from Google Fonts or Noto Fonts and place them in `assets/fonts/`:
-
-- **Noto CJK Fonts**: https://www.google.com/get/noto/
-- **Roboto**: https://fonts.google.com/specimen/Roboto
-- **Open Sans**: https://fonts.google.com/specimen/Open+Sans
-
-### Built-in Font Support
-
-All fonts in `assets/fonts/` are **free for commercial use** under SIL Open Font License or Apache License 2.0.
-
-| 字体文件 | 字体名称 | Language | License | Size |
-|---------|---------|----------|---------|------|
-| `NotoSansCJKsc-Bold.otf` | 思源黑体 Bold | 简体中文 | SIL OFL 1.1 | ~16MB |
-| `NotoSerifCJKsc-Bold.otf` | 思源宋体 Bold | 简体中文 | SIL OFL 1.1 | ~17MB |
-| `NotoSansCJKtc-Bold.otf` | 思源黑體 Bold | 繁體中文 | SIL OFL 1.1 | ~16MB |
-| `NotoSansCJKkr-Bold.otf` | 본고딕 Bold | 한국어 | SIL OFL 1.1 | ~16MB |
-| `Roboto-Bold.ttf` | Roboto Bold | English | Apache 2.0 | ~170KB |
-| `OpenSans-Bold.ttf` | Open Sans Bold | English | SIL OFL 1.1 | ~130KB |
-
-### Font Style Selection
-
-When asking the user to choose a font style (Question 3), **automatically detect the language** from their text content and recommend the appropriate font:
-
-```python
-# Detect language and recommend font
-def recommend_font(text_content, user_style_choice):
-    """
-    Detect language and recommend appropriate font
-    """
-    # Check for Chinese characters
-    if any('\u4e00' <= char <= '\u9fff' for char in text_content):
-        # Simplified vs Traditional detection
-        if is_traditional_chinese(text_content):
-            return 'NotoSansCJKtc-Bold.otf'  # 繁體
-        else:
-            if user_style_choice == 'traditional':
-                return 'NotoSerifCJKsc-Bold.otf'  # 思源宋体
-            else:
-                return 'NotoSansCJKsc-Bold.otf'  # 思源黑体 (default)
-    
-    # Check for Korean
-    elif any('\uac00' <= char <= '\ud7af' for char in text_content):
-        return 'NotoSansCJKkr-Bold.otf'  # 본고딕
-    
-    # Check for Japanese
-    elif any('\u3040' <= char <= '\u309f' or '\u30a0' <= char <= '\u30ff' for char in text_content):
-        return 'NotoSansCJKsc-Bold.otf'  # Use Chinese font as fallback for Japanese
-    
-    # Default to English
-    else:
-        if user_style_choice == 'traditional':
-            return 'OpenSans-Bold.ttf'
-        else:
-            return 'Roboto-Bold.ttf'  # default
-```
 
 ## Output Quality Tips
 
